@@ -2,8 +2,8 @@ import urllib.request
 import json
 
 
-def format_output(list):
-    for item in list:
+def format_output(arr):
+    for item in arr:
         print(item)
 
 
@@ -21,32 +21,22 @@ with urllib.request.urlopen("https://api.ampifymusic.com/packs") as url_json:
     data = json.loads(url_json.read().decode())
 
 songs = data['packs']
+
 genres = []
-all_genres = []
 hip_hop_packs = []
-count = 0
-set_of_genres = {}
-temp = []
 
 for song in songs:
     for genre in song['genres']:
-        if genre in genres:
-            continue
+        genres.append(genre)
         if genre == "hip-hop":
             hip_hop_packs.append(song)
-            count += 1
-        genres.append(genre)
 
-for song in songs:
-    for genre in genres:
-        if genre in song['genres']:
-            temp.append(song)
-        set_of_genres[genre] = temp
+genres = sorted(set(genres))
 
 print("LIST OF ALL GENRES:")
 format_output(genres)
 
 print("LIST OF ALL PACKS WITH THE GENRE 'HIP-HOP':")
-# There is only one song that has the genre hip hop so we print out the only song here
-format_song(hip_hop_packs[0])
+for song in hip_hop_packs:
+    format_song(song)
 
